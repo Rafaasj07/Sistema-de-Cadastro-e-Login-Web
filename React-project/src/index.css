@@ -1,0 +1,12 @@
+* { /*Seleciona todos componestes na página html*/
+  margin: 0; /*Remove a mergen padrão dos navegadores*/
+  padding: 0; /*Remove os preenchimentos internos padrão dos navegadores*/
+  box-sizing: border-box; /*Digo pro navedor que eu vou definir a estrutura da minha página*/
+}
+
+body { /*Corpo da minha página*/
+  min-height: 100vh; /*Garante que o body vai ter 100% de altura*/
+  width: 100vw; /*Garante que o body vai ter 100% de largura*/
+  background: linear-gradient(180deg, #121212 0%, #1c1c1c 100%);
+}
+

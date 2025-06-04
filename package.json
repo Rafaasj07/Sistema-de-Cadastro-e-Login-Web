@@ -1,0 +1,32 @@
+{
+  "name": "sistema_cadastro_web",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.8.2",
+    "axios": "^1.9.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mongodb": "^6.16.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.8.2"
+  },
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rafaasj07/Cadastro_Usuarios_Web.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Rafaasj07/Cadastro_Usuarios_Web/issues"
+  },
+  "homepage": "https://github.com/Rafaasj07/Cadastro_Usuarios_Web#readme",
+  "description": ""
+}
