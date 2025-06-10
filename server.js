@@ -1,112 +1,226 @@
-import express from 'express'
-import { PrismaClient } from './generated/prisma/index.js'
-import cors from 'cors'
+// --- CONFIGURAÇÃO INICIAL ---
+import dotenv from 'dotenv';
+dotenv.config();
+import express from 'express';
+import { PrismaClient } from './generated/prisma/index.js'; // Dica: Altere para o import padrão
+import cors from 'cors';
+import bcrypt from 'bcrypt'; // Biblioteca para criptografar senhas
 
-/**
- * HTTP (HyperText Transfer Protocol) é um protocolo de comunicação — ou seja, 
- * um conjunto de regras que define como dados são enviados e recebidos entre cliente e servidor na web.
- * É uma linguagem de comunicação entre sistemas através da internet.
- *
- * Regras para criar rotas (comunicação entre front-end e back-end):
- * 
- * 1) Método HTTP — tipo da ação desejada:
- *    - GET     -> listar dados
- *    - POST    -> criar dados
- *    - PUT     -> editar todos os dados (substituir)
- *    - PATCH   -> editar parte dos dados
- *    - DELETE  -> deletar dados
- * 
- * 2) URL — o "endereço" onde o cliente (front) fará a requisição ao servidor (back).
- *
- * HTTP Status Codes:
- *    - 2xx -> Sucesso
- *    - 4xx -> Erro no cliente (ex: dados inválidos)
- *    - 5xx -> Erro no servidor (ex: problema no código do back-end)
- */
+const prisma = new PrismaClient();
+const app = express();
+const saltRounds = 10; // "Força" da criptografia
 
-// Thunder Client é uma extensão do VS Code que serve para testar APIs.
-// Simula requisições como se fossem feitas pelo front-end, facilitando a visualização de respostas.
+app.use(express.json());
+app.use(cors());
 
-// Cria uma instância do Prisma Client para interagir com o banco de dados
-const prisma = new PrismaClient()
+// --- ROTAS DE USUÁRIOS (CRUD) ---
 
-// Cria uma instância do Express para configurar o servidor HTTP
-const app = express()
-
-// Middleware para que o servidor entenda requisições com corpo em JSON
-app.use(express.json())
-
-// Permito qualquer página html acessar meu back-and. ISSO NãO É SEGURO!!!
-app.use(cors())
-// Rota para criar um novo usuário
+// Rota para CRIAR um novo usuário (versão corrigida)
 app.post('/usuarios', async (req, res) => {
-    // Usa o Prisma para criar um novo registro na tabela 'usuario' com os dados do corpo da requisição (req.body)
-    await prisma.usuario.create({
-        data: {
-            email: req.body.email,  // Pega o email enviado pelo cliente
-            nome: req.body.nome,    // Pega o nome enviado pelo cliente
-            idade: parseInt(req.body.idade)   // Pega a idade enviada pelo cliente
+    try {
+        // 1. Recebe apenas os dados que o primeiro formulário envia
+        const { email, nome, senha, perfil } = req.body;
+
+        // Validação para garantir que os campos essenciais chegaram
+        if (!email || !nome || !senha || !perfil) {
+            return res.status(400).json({ mensagem: "Dados incompletos para o cadastro." });
         }
-    })
 
-    // Responde com status 201 (Created) e retorna os dados do usuário criado
-    res.status(201).json(req.body)
-})
+        // 2. Criptografa a senha
+        const senhaCriptografada = await bcrypt.hash(senha, saltRounds);
 
-// Rota para editar um usuário existente
-app.put('/usuarios/:id', async (req, res) => {
-    // Usa o Prisma para atualizar um registro na tabela 'usuario' com base no ID passado pela URL
-    await prisma.usuario.update({
-        where: {
-            id: req.params.id // Acessa o id do usuário que será modificado (vindo da URL)
-        },
-        data: {
-            email: req.body.email,  // Atualiza o email com o novo valor enviado pelo cliente
-            nome: req.body.nome,    // Atualiza o nome com o novo valor enviado pelo cliente
-            idade: parseInt(req.body.idade)   // Atualiza a idade com o novo valor enviado pelo cliente
-        }
-    })
-
-    // Responde com status 201 (Created) e retorna os dados atualizados
-    res.status(201).json(req.body)
-})
-
-// Rota para listar todos os usuários (com ou sem filtros)
-app.get('/usuarios', async (req, res) => {
-    // Busca todos os usuários salvos no banco usando o Prisma
-
-    let usuarios = []
-
-    if (req.query) { 
-        // Se houver filtros passados como query (ex: /usuarios?nome=Maria), aplica os filtros
-        usuarios = await prisma.usuario.findMany({
-            where: {
-                email: req.query.email,  // Filtra por email (se fornecido)
-                nome: req.query.nome,    // Filtra por nome (se fornecido)
-                idade: req.query.idade ? Number(req.query.idade) : undefined  // Filtra por idade (se fornecido) e converte para numero caso fornecido
+        // 3. Cria o usuário no banco APENAS com os dados recebidos
+        const novoUsuario = await prisma.usuario.create({
+            data: {
+                email,
+                nome,
+                senha: senhaCriptografada,
+                perfil
             }
-        })
-    } else {
-        // Se nenhum filtro for passado, retorna todos os usuários
-        usuarios = await prisma.usuario.findMany()
+        });
+
+        // 4. Retorna o usuário criado com sucesso
+        res.status(201).json(novoUsuario);
+        
+    } catch (error) {
+        // Loga o erro no terminal para depuração
+        console.error("Erro ao criar usuário:", error); 
+        
+        // Trata erros de campos únicos (ex: email já existe)
+        if (error.code === 'P2002') {
+            const campo = error.meta.target.join(', ');
+            return res.status(409).json({ mensagem: `O campo ${campo} já está em uso.` });
+        }
+
+        // Para todos os outros erros, retorna o 500
+        res.status(500).json({ mensagem: 'Ocorreu um erro interno no servidor.' });
     }
+});
 
-    // Retorna a lista de usuários com status 200 (OK)
-    res.status(200).json(usuarios)
-})
 
-// Rota para excluir um usuário
+// Rota para ATUALIZAR um usuário existente por ID
+app.put('/usuarios/:id', async (req, res) => {
+    try {
+        // Se uma nova senha for enviada, criptografa ela também
+        if (req.body.senha) {
+            req.body.senha = await bcrypt.hash(req.body.senha, saltRounds);
+        }
+        const usuarioAtualizado = await prisma.usuario.update({
+            where: { id: req.params.id },
+            data: req.body // Prisma atualiza apenas os campos que foram enviados
+        });
+        res.status(200).json(usuarioAtualizado);
+    } catch (error) {
+        // Trata erros de campos únicos (ex: CPF duplicado na atualização)
+        if (error.code === 'P2002') {
+            return res.status(409).json({ mensagem: `Erro: O campo ${error.meta.target.join(', ')} já está em uso.` });
+        }
+        console.error("Erro na rota PUT /usuarios/:id :", error);
+        res.status(500).json({ mensagem: 'Ocorreu um erro interno no servidor.' });
+    }
+});
+
+// Rota para LISTAR usuários (com ou sem filtros)
+app.get('/usuarios', async (req, res) => {
+    try {
+        const { nome, email } = req.query;
+        const where = {};
+        if (nome) where.nome = { contains: nome, mode: 'insensitive' };
+        if (email) where.email = email;
+
+        const usuarios = await prisma.usuario.findMany({ where });
+        res.status(200).json(usuarios);
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Ocorreu um erro interno no servidor.' });
+    }
+});
+
+// Rota para DELETAR um usuário por ID
 app.delete('/usuarios/:id', async (req, res) => {
-    // Usa o Prisma para deletar o registro com o ID fornecido
-    await prisma.usuario.delete({
-        where: {
-            id: req.params.id // Acessa o id do usuário que será excluído (vindo da URL)
-        },
-    })
+    try {
+        await prisma.usuario.delete({
+            where: { id: req.params.id },
+        });
+        res.status(200).json({ message: 'Usuário deletado!' });
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Ocorreu um erro interno no servidor.' });
+    }
+});
 
-    // Responde com status 200 (OK) e uma mensagem de confirmação
-    res.status(200).json({ message: 'Usuário deletado!' })
-})
+// --- ROTA DE AUTENTICAÇÃO ---
 
-// Inicia o servidor HTTP na porta 3000
-app.listen(3000)
+// Rota para LOGIN
+app.post('/login', async (req, res) => {
+    try {
+        const { email, senha } = req.body;
+        // Busca o usuário apenas pelo e-mail (que é único)
+        const usuario = await prisma.usuario.findUnique({
+            where: { email: email }
+        });
+        // Se não encontrou usuário, retorna erro
+        if (!usuario) {
+            return res.status(401).json({ sucesso: false, mensagem: 'Credenciais inválidas' });
+        }
+        // Compara a senha enviada com a senha criptografada no banco
+        const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+
+        if (senhaCorreta) {
+            res.status(200).json({ sucesso: true, perfil: usuario.perfil });
+        } else {
+            res.status(401).json({ sucesso: false, mensagem: 'Credenciais inválidas' });
+        }
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Ocorreu um erro interno no servidor.' });
+    }
+});
+
+// --- ROTAS PARA RECUPERAÇÃO DE SENHA ---
+
+// Rota para verificar se o e-mail existe no banco
+app.post('/buscaUsuario', async (req, res) => {
+    const { tentativaEmail } = req.body;
+
+    try {
+        const usuario = await prisma.usuario.findUnique({
+            where: { email: tentativaEmail }
+        });
+
+        if (usuario) {
+            res.status(200).json({ sucesso: true, id: usuario.id, pergunta: usuario.pergunta });
+        } else {
+            res.status(404).json({ sucesso: false, mensagem: 'Usuário não encontrado.' });
+        }
+    } catch (error) {
+        res.status(500).json({ sucesso: false, mensagem: 'Ocorreu um erro interno no servidor.' });
+    }
+});
+
+// Rota para verificar se a resposta é correta
+app.post('/verificar-resposta', async (req, res) => {
+    try {
+        const { id, tentativaResposta } = req.body;
+
+        if (!id || !tentativaResposta) {
+            return res.status(400).json({ sucesso: false, mensagem: 'Dados incompletos.' });
+        }
+
+        const usuario = await prisma.usuario.findUnique({
+            where: { id: id }
+        });
+
+        if (!usuario) {
+            return res.status(404).json({ sucesso: false, mensagem: 'Utilizador não encontrado.' });
+        }
+
+        if (usuario.resposta === tentativaResposta) {
+            res.status(200).json({ sucesso: true });
+        } else {
+            res.status(401).json({ sucesso: false, mensagem: 'Resposta de segurança incorreta.' });
+        }
+    } catch (error) {
+        console.error("Erro na rota /verificar-resposta:", error);
+        res.status(500).json({ sucesso: false, mensagem: 'Ocorreu um erro interno no servidor.' });
+    }
+});
+
+
+// Rota para mudar a senha
+app.post('/mudarSenha', async (req, res) => {
+    try {
+        const { id, NovaSenha } = req.body;
+
+        if (!id || !NovaSenha) {
+            return res.status(400).json({ sucesso: false, mensagem: 'ID do usuário e nova senha são obrigatórios.' });
+        }
+        
+        const usuario = await prisma.usuario.findUnique({
+            where: { id: id }
+        });
+
+        if (!usuario) {
+            return res.status(404).json({ sucesso: false, mensagem: 'Usuário não encontrado.' });
+        }
+
+        const novaSenhaCriptografada = await bcrypt.hash(NovaSenha, 10);
+
+        await prisma.usuario.update({
+            where: { id: id },
+            data: { senha: novaSenhaCriptografada }
+        });
+
+        res.status(200).json({ 
+            sucesso: true, 
+            mensagem: 'Senha atualizada com sucesso!', 
+            perfil: usuario.perfil
+        });
+
+    } catch (error) {
+        console.error("Erro ao mudar a senha:", error); 
+        res.status(500).json({ sucesso: false, mensagem: 'Ocorreu um erro interno no servidor.' });
+    }
+});
+
+// --- INICIALIZAÇÃO DO SERVIDOR ---
+app.listen(3000, () => {
+    console.log('Servidor rodando na porta 3000');
+});
