@@ -2,7 +2,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
-import { PrismaClient } from './generated/prisma/index.js'; // Dica: Altere para o import padrão
+import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
 import bcrypt from 'bcrypt'; // Biblioteca para criptografar senhas
 import path from 'path'; 
