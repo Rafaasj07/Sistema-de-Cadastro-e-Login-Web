@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'; // Hooks para gerenciamento de esta
 import Lixeira from '../../assets/lixeira.svg'; // Importa o ícone da lixeira.
 import api from '../../services/api'; // Importa a configuração da API.
 import './styleFuncoesAdm.css'; // Importa os estilos.
+import logoIcone from '../../assets/icone.png';
 
 // --- COMPONENTE FuncoesAdm ---
 // Página com as funcionalidades exclusivas do administrador.
@@ -89,7 +90,7 @@ function FuncoesAdm() {
                 <div className='botoes-fun-adm'>
                     <button type="button" onClick={() => navegar('/Home')}>Home</button>
                 </div>
-                <img src="./src/assets/icone.png" alt="Logo do sistema" className="logo-adm" />
+                <img src={logoIcone} alt="Logo do sistema" className="logo-adm" />
             </nav>
 
             {/* Container onde os cards de usuário serão exibidos */}

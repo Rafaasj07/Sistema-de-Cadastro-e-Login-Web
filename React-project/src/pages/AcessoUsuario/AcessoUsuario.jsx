@@ -1,6 +1,7 @@
 // --- IMPORTAÇÕES ---
 import { useNavigate } from 'react-router-dom'; // Hook para navegar entre as páginas.
 import './styleAcessoUsuario.css'; // Importa os estilos da página.
+import logoIcone from '../../assets/icone.png';
 
 // --- COMPONENTE AcessoUsuario ---
 // Componente que mostra uma tela de sucesso após o login bem-sucedido do usuário.
@@ -22,7 +23,7 @@ function AcessoUsuario() {
           <button type='button' onClick={() => navegar('/Home')}>Home</button>
         </div>
         {/* Logo do sistema */}
-        <img src="./src/assets/icone.png" alt="Logo do sistema" className="logoAcesso" />
+        <img src={logoIcone} alt="Logo do sistema" className="logoAcesso" />
       </form>
     </div>
   );

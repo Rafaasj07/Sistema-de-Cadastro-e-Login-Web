@@ -1,6 +1,7 @@
 // --- IMPORTAÇÕES ---
 import { useNavigate } from 'react-router-dom'; // Importa o hook para navegação.
 import './styleHome.css'; // Importa os estilos da página.
+import logoIcone from '../../assets/icone.png';
 
 // --- COMPONENTE Home ---
 // Define o componente da página inicial, onde o usuário escolhe o perfil de acesso.
@@ -22,7 +23,7 @@ function Home() {
                     <button type='button' onClick={() => navegar('/MenuAdm')}>Menu Adm</button>
                 </div>
                 {/* Logo do sistema */}
-                <img src="./src/assets/icone.png" alt="Logo do sistema" className="logoHome" />
+                <img src={logoIcone} alt="Logo do sistema" className="logoHome" /> 
             </form>
         </div>
     );
