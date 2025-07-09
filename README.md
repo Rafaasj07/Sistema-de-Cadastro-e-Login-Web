@@ -2,6 +2,12 @@
 
 Este é um projeto full-stack que implementa um sistema completo de registro, login, recuperação de senha e gerenciamento de usuários, com perfis distintos para "Usuário" e "Administrador".
 
+## 🚀 Acesso à Aplicação
+
+Você pode acessar e testar a versão ao vivo do projeto através do seguinte link:
+
+**[https://sistema-de-cadastro-e-login-web.onrender.com/home](https://sistema-de-cadastro-e-login-web.onrender.com/home)**
+
 ## Descrição
 
 A aplicação permite que novos usuários se cadastrem em um processo de duas etapas, definindo uma pergunta e resposta de segurança. Usuários existentes podem fazer login, e caso esqueçam a senha, podem recuperá-la através da pergunta secreta.
