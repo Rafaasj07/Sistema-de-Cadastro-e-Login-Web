@@ -27,6 +27,7 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         {/* --- DEFINIÇÃO DAS ROTAS --- */}
         {/* Cada Route define um caminho (URL) e o componente que será exibido. */}
+        <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/Home" element={<Home />} />
         <Route path="/MenuUsuario" element={<MenuUsuario />} />
         <Route path="/MenuAdm" element={<MenuAdm />} />
