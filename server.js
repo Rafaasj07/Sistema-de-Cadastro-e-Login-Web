@@ -5,16 +5,23 @@ import express from 'express';
 import { PrismaClient } from './generated/prisma/index.js'; // Dica: Altere para o import padrão
 import cors from 'cors';
 import bcrypt from 'bcrypt'; // Biblioteca para criptografar senhas
+import path from 'path'; 
+import { fileURLToPath } from 'url';
 
 const prisma = new PrismaClient();
 const app = express();
 const saltRounds = 10; // "Força" da criptografia
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename); 
+
 app.use(express.json());
 app.use(cors());
 
-// --- ROTAS DE USUÁRIOS (CRUD) ---
+// --- SERVIR ARQUIVOS ESTÁTICOS DO FRONTEND ---
+app.use(express.static(path.join(__dirname, 'dist')));
 
+// --- ROTAS DE USUÁRIOS (CRUD) ---
 // Rota para CRIAR um novo usuário (versão corrigida)
 app.post('/usuarios', async (req, res) => {
     try {
@@ -220,7 +227,16 @@ app.post('/mudarSenha', async (req, res) => {
     }
 });
 
+
+// --- ROTA "CATCH-ALL" ---
+// Rota para servir o app React para qualquer caminho não encontrado pela API
+app.use((req, res, next) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+
 // --- INICIALIZAÇÃO DO SERVIDOR ---
-app.listen(3000, () => {
-    console.log('Servidor rodando na porta 3000');
+const PORT = process.env.PORT || 3000; 
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
 });
