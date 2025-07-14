@@ -1,60 +1,101 @@
 /* --- CONTAINER GERAL --- */
 .containerAcesso {
-  display: flex;
-  align-items: center; /* Centraliza os itens verticalmente. */
-  flex-direction: column; /* Organiza os itens em uma coluna. */
-  padding-top: 145px;
-}
-
-/* --- FORMULÁRIO (CONTAINER DO CONTEÚDO) --- */
-.formAcesso {
+  width: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  height: 380px;
-  padding: 30px;
-  border-radius: 15px;
-  background-color: #1c2738;
-  max-width: 50%;
-  width: 400px;
-  margin-bottom: 20px;
+  align-items: center;
+  justify-content: center;
+  padding: 90px 20px 20px;
+  box-sizing: border-box;
+  background-color: #12121a;
 }
 
-/* --- TÍTULO --- */
-.acessoH1 {
-  margin-top: 20px;
-  color: limegreen; /* Cor de sucesso. */
-  font-size: 32px;
+/* --- CONTEÚDO PRINCIPAL --- */
+.conteudoAcesso {
+  flex-grow: 1; /* Ocupa o espaço disponível. */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }
 
-/* --- SEÇÃO DE BOTÕES --- */
-.botoesAcesso {
-  display: flex;
-  margin-top: 30px;
-  flex-direction: column;
-  gap: 25px; /* Espaçamento entre os botões. */
-}
-
-/* --- ESTILO GERAL DOS BOTÕES --- */
-.botoesAcesso button {
-  border-radius: 30px;
-  height: 45px;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 16px;
+/* --- ÍCONE DE SUCESSO --- */
+.icone-sucesso {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #28a745;
   color: white;
-  transition: opacity 0.3s, background-color 0.3s;
-  background-color: rgb(67 52 157);
+  font-size: 50px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px;
+  box-shadow: 0 0 15px rgba(40, 167, 69, 0.5);
 }
 
-.botoesAcesso button:hover {
-  opacity: 0.8; /* Efeito ao passar o mouse. */
+/* --- TÍTULO E SUBTÍTULO --- */
+.acessoH1 {
+  color: #ffffff;
+  font-size: 38px;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+}
+.acesso-subtitulo {
+  color: #c5c5c5;
+  font-size: 18px;
+  max-width: 400px;
+  margin-bottom: 30px;
 }
 
-/* --- LOGO --- */
-.logoAcesso {
-  width: 90px;
-  margin-top: 33px;
-  align-self: center; /* Centraliza a logo no container. */
+/* --- BOTÃO DE VOLTAR PARA A HOME --- */
+.botao-home {
+  height: 45px;
+  padding: 0 30px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 25px;
+  background-color: #43349d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.botao-home:hover {
+  background-color: #5644c5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* --- RODAPÉ --- */
+.footer-acesso {
+  width: 100%;
+  text-align: center;
+  padding: 20px 0;
+  flex-shrink: 0; /* Impede que o rodapé encolha. */
+  font-family: 'Courier New', Courier, monospace;
+}
+.footer-desenvolvido {
+  color: #e5e7eb;
+  padding-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.footer-link {
+  color: #9ca3af;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+.footer-link:hover {
+  color: #ffffff;
+  text-decoration: underline;
 }

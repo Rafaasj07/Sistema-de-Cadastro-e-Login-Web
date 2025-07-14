@@ -1,100 +1,176 @@
 /* --- CONTAINER GERAL --- */
 .containerLogin {
+    width: 100%;
+    min-height: 100vh;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    padding: 145px;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 /* --- TÍTULO --- */
 #h1Login {
-    color: white;
+    color: #ffffff;
     font-size: 32px;
     text-align: center;
-    margin-bottom: 10px;
 }
 
 /* --- FORMULÁRIO --- */
 .formLogin {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    padding: 30px;
-    border-radius: 15px;
-    background-color: #1c2738;
     width: 100%;
     max-width: 400px;
-    height: 380px;
-    margin-bottom: 20px;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 30px 40px;
+    border-radius: 15px;
+    background-color: transparent;
+    border: 2px solid rgba(225, 225, 225, 0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(30px);
+    box-sizing: border-box;
+    overflow: hidden;
+    margin-bottom: 85px;
 }
 
-/* --- INPUTS --- */
-.formLogin input {
-    background-color: #2b3a50;
-    color: #ffffff;
-    border: 1.7px solid rgba(255, 255, 255, 0.08);
-    border-radius: 30px;
-    height: 45px;
-    font-size: 16px;
-    padding: 0 20px;
+/* --- INPUTS Email e Senha --- */
+.inputBox {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 10px 0; /* Espaçamento entre os inputs */
+}
+
+.inputBox input {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
     outline: none;
+    border-radius: 40px;
+    border: 2px solid rgba(225, 225, 225, 0.2);
+    color: #fff;
+    padding: 20px 45px 20px 20px;
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.formLogin input:focus {
+/* --- CÓDIGO CORRIGIDO PARA O AUTOFILL --- */
+/* Garante que o fundo do input com preenchimento automático fique transparente. */
+.inputBox input:-webkit-autofill,
+.inputBox input:-webkit-autofill:hover,
+.inputBox input:-webkit-autofill:focus,
+.inputBox input:-webkit-autofill:active {
+    -webkit-text-fill-color: #fff !important; /* Força a cor do texto para branco */
+    transition: background-color 5000s ease-in-out 0s; /* Evita que o navegador mude a cor de fundo */
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important; /* Cobre o fundo padrão com uma sombra transparente */
+}
+
+.inputBox .input-error {
+    border-color: #e74c3c;
+}
+
+.inputBox input:focus {
     border-color: #86b7fe;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); /* Efeito de foco. */
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
-/* Estilo para corrigir a cor de fundo do preenchimento automático do navegador. */
-.formLogin input:-webkit-autofill,
-.formLogin input:-webkit-autofill:hover, 
-.formLogin input:-webkit-autofill:focus, 
-.formLogin input:-webkit-autofill:active {
-    -webkit-text-fill-color: #ffffff;
-    box-shadow: 0 0 0 30px #2b3a50 inset !important;
-    transition: background-color 5000s ease-in-out 0s;
+.inputBox input::placeholder {
+    color: #c5c5c5;
 }
 
-/* --- MENSAGENS DE FEEDBACK --- */
-.mensagemLogin {
-    font-weight: bold;
-    text-align: center;
-    font-size: 16px;
-    color: tomato; /* Cor padrão para mensagens de erro/aviso. */
-    min-height: 20px;
-    margin: -10px 0;
+.inputBox i {
+    color: #fff;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
 }
 
-/* --- BOTÕES --- */
-#butaoLogin, .butaoVoltarHomeLogin {
-    border-radius: 30px;
-    height: 45px;
+/* --- INPUT Lembrar Senha --- */
+.lembrarSenha {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    margin: -5px 8px 15px 8px; /* Ajusta a posição */
+}
+
+.lembrarSenha label {
+    color: #fff;
+}
+
+.lembrarSenha label input {
+    accent-color: #fff;
+    margin-right: 5px;
+}
+
+.lembrarSenha a {
+    text-decoration: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+.lembrarSenha a:hover {
+    text-decoration: underline;
+}
+
+.loginBotao {
+    width: 100%;
+    height: 50px;
+    background-color: #fff;
     border: none;
-    font-weight: bold;
+    border-radius: 40px;
     cursor: pointer;
     font-size: 16px;
-    color: white;
-    transition: opacity 0.3s, background-color 0.3s;
+    color: #333;
+    font-weight: 600;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
-#butaoLogin {
-    background-color: rgb(67 52 157);
-    margin-bottom: 20px;
+.loginBotao:hover {
+    background-color: transparent;
+    border: 2px solid rgba(225, 225, 225, 0.2);
+    color: #fff;
+    transition: 0.5s;
 }
 
-.butaoVoltarHomeLogin {
-    background-color: #b86c45;
-    width: 100%;
-    max-width: 400px;
-    margin-top: 20px;
+/* --- ALTERAÇÃO: Posição do link de cadastro --- */
+.cadastroLink {
+    font-size: 15px;
+    text-align: center;
+    margin-top: 15px; /* Margem superior menor para subir o link */
 }
 
-#butaoLogin:hover, .butaoVoltarHomeLogin:hover {
-    opacity: 0.8; /* Efeito ao passar o mouse. */
+.cadastroLink p {
+    color: #fff;
+    margin: 0;
 }
 
-#butaoLogin:disabled {
-    background-color: #3a4a61;
-    cursor: not-allowed;
+.cadastroLink a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.cadastroLink a:hover {
+    text-decoration: underline;
+}
+
+/* --- ALTERAÇÃO: Espaçador e Mensagem de Erro --- */
+.form-spacer {
+    flex-grow: 1; /* Faz este elemento ocupar todo o espaço vertical disponível */
+}
+
+.mensagem-erro {
+    font-size: 13px;
+    color: #ff7b7b;
+    font-weight: 500;
+    text-align: center;
+    /* A mensagem agora não precisa de margem superior, pois o spacer a empurra para baixo */
+    margin-bottom: 5px; /* Pequena margem para não colar na borda */
+    min-height: 15px; 
 }

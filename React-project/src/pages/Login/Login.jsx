@@ -1,97 +1,108 @@
 // --- IMPORTAÇÕES ---
-import { useState } from 'react'; // Hook para gerenciar o estado (email, senha, mensagens).
-import { useNavigate } from 'react-router-dom'; // Hook para navegação.
-import './styleLogin.css'; // Importa os estilos.
-import api from '../../services/api'; // Importa a configuração da API.
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './styleLogin.css';
+import api from '../../services/api';
 
 // --- COMPONENTE Login ---
-function Login() {
-    // --- HOOKS ---
+// Formulário de login que lida com a autenticação do usuário.
+function Login({ onNavigateToCadastro }) {
+    // --- HOOKS e ESTADOS ---
     const navegar = useNavigate();
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const [lembrarEmail, setLembrarEmail] = useState(false); // Checkbox "Lembrar email".
+    const [mensagem, setMensagem] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasError, setHasError] = useState(false);
 
-    // --- ESTADOS DO COMPONENTE ---
-    const [senha, setSenha] = useState(''); // Armazena a senha digitada.
-    const [email, setEmail] = useState(''); // Armazena o email digitado.
-    const [mensagem, setMensagem] = useState(''); // Armazena mensagens de feedback.
-    const [isLoading, setIsLoading] = useState(false); // Controla o estado de "carregando".
-    const [mostrarBotaoHome, setMostrarBotaoHome] = useState(false); // Controla a exibição de botões extras.
+    // --- EFEITO: Carrega o e-mail salvo do localStorage na montagem. ---
+    useEffect(() => {
+        const emailSalvo = localStorage.getItem('emailSalvo');
+        if (emailSalvo) {
+            setEmail(emailSalvo);
+            setLembrarEmail(true);
+        }
+    }, []);
 
-    // --- FUNÇÕES ---
-    // Envia a requisição para validar as credenciais do usuário.
+    // --- FUNÇÃO DE LOGIN ---
     async function fazerLogin(e) {
-        e.preventDefault(); // Impede o recarregamento da página.
+        e.preventDefault();
+        limparFeedback();
         setIsLoading(true);
-        setMensagem('');
-
         try {
-            // --- VALIDAÇÃO DE PERFIL ---
-            // Pega o perfil ('adm' ou 'usuario') que o usuário escolheu na tela Home.
+            // Verifica qual perfil (usuário/adm) está selecionado.
             const perfilEsperado = localStorage.getItem('perfil');
-
-            if (!perfilEsperado) {
-                // Se nenhum perfil foi escolhido, exibe erro.
-                setMensagem('Erro: Perfil de acesso não definido. Volte para a Home.');
-                setIsLoading(false);
-                return;
-            }
-
-            // --- REQUISIÇÃO À API ---
-            // Envia as credenciais para a rota '/login' no backend.
-            const resposta = await api.post('/login', { email, senha });
-            const { sucesso, perfil: perfilReal } = resposta.data; // Pega o perfil real do usuário do banco de dados.
-
+            // Envia os dados para a API de login.
+            const response = await api.post('/login', { email, senha });
+            const { sucesso, perfil: perfilReal, id } = response.data;
             if (sucesso) {
-                // --- COMPARAÇÃO DE PERFIS ---
-                // Compara o perfil que o usuário tentou acessar com o perfil real dele.
-                if (perfilReal === perfilEsperado) {
-                    // SUCESSO: Os perfis são iguais, o acesso é permitido.
-                    if (perfilReal === 'adm') {
-                        navegar('/FuncoesAdm'); // Redireciona para as funções de ADM.
-                    } else {
-                        navegar('/AcessoUsuario'); // Redireciona para a área do usuário.
-                    }
+                localStorage.setItem('userId', id);
+                // Salva ou remove o e-mail do localStorage.
+                if (lembrarEmail) {
+                    localStorage.setItem('emailSalvo', email);
                 } else {
-                    // FALHA: Os perfis são diferentes, o acesso é negado.
-                    setMensagem(`Tente um login de '${perfilEsperado}'.`);
-                    setMostrarBotaoHome(true);
+                    localStorage.removeItem('emailSalvo');
                 }
+                // Redireciona com base no perfil correto.
+                if (perfilReal === perfilEsperado) {
+                    navegar(perfilReal === 'adm' ? '/FuncoesAdm' : '/AcessoUsuario');
+                } else {
+                    setHasError(true);
+                    setMensagem('Credenciais para o perfil errado.');
+                }
+            } else {
+                setHasError(true);
+                setMensagem(response.data.mensagem || 'Ocorreu um erro inesperado.');
             }
         } catch (error) {
-            // Erro de credenciais inválidas vindo da API.
-            setMensagem('Email ou senha inválidos.');
-            setMostrarBotaoHome(true);
+            setHasError(true);
+            setMensagem(error.response?.data?.mensagem || 'Email ou senha inválidos.');
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false); // Finaliza o estado de carregamento.
     }
 
     // Limpa as mensagens de feedback.
     function limparFeedback() {
         setMensagem('');
-        setMostrarBotaoHome(false);
+        setHasError(false);
     }
 
-    // --- RENDERIZAÇÃO DO COMPONENTE ---
+    // --- RENDERIZAÇÃO ---
     return (
         <div className='containerLogin'>
-            {/* Formulário de Login */}
             <form className='formLogin' onSubmit={fazerLogin}>
                 <h1 id='h1Login'>Login</h1>
-                {/* Input de Email */}
-                <input placeholder='Email' type='email' required value={email} onChange={e => setEmail(e.target.value)} onFocus={limparFeedback}/>
-                {/* Input de Senha */}
-                <input placeholder='Senha' type='password' required value={senha} onChange={e => setSenha(e.target.value)} onFocus={limparFeedback} />
-                {/* Botão de Entrar */}
-                <button id='butaoLogin' type="submit" disabled={isLoading}>
+                {/* Inputs para email e senha. */}
+                <div className='inputBox'>
+                    <input placeholder='Email' name='email' type='email' required value={email} onChange={e => setEmail(e.target.value)} onFocus={limparFeedback} className={hasError ? 'input-error' : ''} autoComplete='email' />
+                    <i className='bx bxs-user'></i>
+                </div>
+                <div className='inputBox'>
+                    <input placeholder='Senha' name='password' type='password' required value={senha} onChange={e => setSenha(e.target.value)} onFocus={limparFeedback} className={hasError ? 'input-error' : ''} autoComplete='current-password' />
+                    <i className='bx bxs-lock-alt'></i>
+                </div>
+                {/* Opções de "Lembrar email" e "Esqueci a senha". */}
+                <div className='lembrarSenha'>
+                    <label>
+                        <input type='checkbox' checked={lembrarEmail} onChange={e => setLembrarEmail(e.target.checked)} />
+                        Lembrar email
+                    </label>
+                    <a onClick={() => navegar('/RecuperarSenha')}>Esqueci a senha</a>
+                </div>
+                {/* Botão de submissão. */}
+                <button type="submit" className='loginBotao' disabled={isLoading}>
                     {isLoading ? 'Entrando...' : 'Entrar'}
                 </button>
-                {/* Exibe a mensagem de feedback se ela existir. */}
-                {mensagem && <p className='mensagemLogin'>{mensagem}</p>}
+                {/* Link para o formulário de Cadastro. */}
+                <div className='cadastroLink'>
+                    <p>Não tem uma conta? <a onClick={onNavigateToCadastro}>Cadastre-se</a></p>
+                </div>
+                <div className="form-spacer"></div>
+                {/* Exibição de mensagem de erro. */}
+                {mensagem && <p className='mensagem-erro'>{mensagem}</p>}
             </form>
-
-            {/* Botão condicional para ir para a recuperação de senha. */}
-            {mostrarBotaoHome && (
-                <button type='button' className='butaoVoltarHomeLogin' onClick={() => navegar('/RecuperarSenha')}>Recuperar Senha</button>
-            )}
         </div>
     );
 }

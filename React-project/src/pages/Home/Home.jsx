@@ -1,30 +1,60 @@
 // --- IMPORTAÇÕES ---
-import { useNavigate } from 'react-router-dom'; // Importa o hook para navegação.
-import './styleHome.css'; // Importa os estilos da página.
+import { useState, useEffect } from 'react';
+import './styleHome.css';
 import logoIcone from '../../assets/icone.png';
+import Login from '../Login/Login';
+import Cadastro from '../Cadastro/Cadastro';
 
 // --- COMPONENTE Home ---
-// Define o componente da página inicial, onde o usuário escolhe o perfil de acesso.
+// Página principal que permite ao usuário escolher um perfil (usuário ou adm)
+// e alternar entre os formulários de Login e Cadastro.
 function Home() {
-    // --- HOOKS ---
-    const navegar = useNavigate(); // Inicializa a função de navegação.
+    // --- ESTADOS ---
+    const [perfilAtivo, setPerfilAtivo] = useState('usuario'); // Controla o perfil ativo.
+    const [mostrarFormulario, setMostrarFormulario] = useState('login'); // Controla qual formulário é exibido.
 
-    // --- RENDERIZAÇÃO DO COMPONENTE ---
+    // --- EFEITO: Define o perfil inicial ao carregar a página. ---
+    useEffect(() => {
+        // Usa o perfil do localStorage se existir, senão define 'usuario' como padrão.
+        const perfilSalvo = localStorage.getItem('perfil');
+        if (perfilSalvo) {
+            setPerfilAtivo(perfilSalvo);
+        } else {
+            localStorage.setItem('perfil', 'usuario');
+        }
+    }, []);
+
+    // --- FUNÇÃO DE CONTROLE ---
+    // Atualiza o perfil no estado e no localStorage quando um botão é clicado.
+    const selecionarPerfil = (perfil) => {
+        localStorage.setItem('perfil', perfil);
+        setPerfilAtivo(perfil);
+    };
+
+    // --- RENDERIZAÇÃO ---
     return (
         <div className='containerHome'>
-            {/* Formulário usado como container para o conteúdo */}
-            <form className='formHome'>
-                <h1 id='h1Home'>Sistema de Cadastro e Login</h1>
-                {/* Div para agrupar os botões de escolha de perfil. */}
-                <div className='botoesHome'>
-                    {/* Botão para o perfil de usuário. Ao clicar, chama a função 'escolherPerfil' passando 'usuario'. */}
-                    <button type='button' onClick={() => navegar('/MenuUsuario')}>Menu Usuário</button>
-                    {/* Botão para o perfil de administrador. Ao clicar, chama a função 'escolherPerfil' passando 'adm'. */}
-                    <button type='button' onClick={() => navegar('/MenuAdm')}>Menu Adm</button>
+            {/* Barra de navegação com título e seleção de perfil. */}
+            <nav className='navHome'>
+                <div className='logoTituloHome'>
+                    <img src={logoIcone} alt="Logo do sistema" className="logoHome" />
+                    <h1 id='h1Home'>Sistema de Cadastro e Login</h1>
                 </div>
-                {/* Logo do sistema */}
-                <img src={logoIcone} alt="Logo do sistema" className="logoHome" /> 
-            </form>
+                <div className='direita-nav'>
+                    <div className='containerH2'><h2>Escolha um Perfil: </h2></div>
+                    <div className='botoesHome'>
+                        <button type='button' className={perfilAtivo === 'usuario' ? 'active' : ''} onClick={() => selecionarPerfil('usuario')}>Usuário</button>
+                        <button type='button' className={perfilAtivo === 'adm' ? 'active' : ''} onClick={() => selecionarPerfil('adm')}>Adm</button>
+                    </div>
+                </div>
+            </nav>
+
+            {/* Renderiza o formulário de Login ou Cadastro condicionalmente. */}
+            {mostrarFormulario === 'login' ? (
+                <Login onNavigateToCadastro={() => setMostrarFormulario('cadastro')} />
+            ) : (
+                <Cadastro onNavigateToLogin={() => setMostrarFormulario('login')} />
+            )}
         </div>
     );
 }

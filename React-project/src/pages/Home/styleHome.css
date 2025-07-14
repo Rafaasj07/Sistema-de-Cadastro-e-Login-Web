@@ -1,59 +1,74 @@
-/* --- CONTAINER GERAL --- */
+/* --- ESTILOS GERAIS --- */
+body { margin: 0; font-family: 'Poppins', sans-serif; background-color: #12121a; }
+
+/* --- CONTAINER PRINCIPAL --- */
 .containerHome {
+  width: 100%;
+  min-height: 100vh; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- BARRA DE NAVEGAÇÃO --- */
+.navHome {
+  width: 100%;
+  height: 90px;
+  background: #1E1E2F;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
-  flex-direction: column;
-  padding-top: 145px;
+  justify-content: space-between;
+  padding: 0 50px 0 20px;
+  box-sizing: border-box; 
 }
 
-/* --- FORMULÁRIO (CONTAINER DO CONTEÚDO) --- */
-.formHome {
+/* --- SEÇÕES DA NAV --- */
+.logoTituloHome, .direita-nav, .botoesHome {
   display: flex;
-  flex-direction: column;
-  height: 380px;
-  padding: 30px;
-  border-radius: 15px;
-  background-color: #1c2738;
-  max-width: 50%;
-  width: 400px;
-  margin-bottom: 20px;
+  align-items: center;
+  gap: 10px;
 }
+.direita-nav { gap: 25px; }
+.botoesHome { gap: 20px; }
 
-/* --- TÍTULO --- */
+/* --- ELEMENTOS DA NAV --- */
+.logoHome { height: 55px; width: auto; margin-top: 6px; }
 #h1Home {
-  color: white;
+  color: #ffffff;
   font-size: 32px;
-  text-align: center;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  margin: 0;
+}
+.containerH2 h2 {
+  color: #e0e0e0;
+  font-size: 22px;
+  font-weight: 500;
+  margin: 0;
+  white-space: nowrap;
 }
 
-/* --- LOGO --- */
-.logoHome {
-  width: 90px;
-  margin-top: 25px;
-  align-self: center; /* Centraliza a logo no container. */
-}
-
-/* --- SEÇÃO DE BOTÕES --- */
-.botoesHome {
-  display: flex;
-  margin-top: 30px;
-  flex-direction: column;
-  gap: 25px; /* Espaçamento entre os botões. */
-}
-
-/* --- ESTILO GERAL DOS BOTÕES --- */
+/* --- BOTÕES DE PERFIL --- */
 .botoesHome button {
   border-radius: 30px;
   height: 45px;
-  border: none;
+  width: 130px;
+  border: 2px solid transparent;
   font-weight: bold;
   cursor: pointer;
   font-size: 16px;
   color: white;
-  transition: opacity 0.3s, background-color 0.3s;
-  background-color: rgb(67 52 157);
+  background-color: #43349d;
+  transition: all 0.3s ease;
 }
-
-.botoesHome button:hover {
-  opacity: 0.8; /* Efeito ao passar o mouse. */
+.botoesHome button:hover,
+.botoesHome button.active { /* Estilo do botão ativo/hover. */
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  background-color: #5644c5;
+  border-color: #a39cf1;
 }

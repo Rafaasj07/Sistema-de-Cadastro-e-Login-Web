@@ -1,117 +1,89 @@
 // --- IMPORTAÇÕES ---
-import { useState, useEffect } from 'react'; // Hooks do React para estado e ciclo de vida.
-import { useNavigate, useParams } from 'react-router-dom'; // Hooks para navegação e captura de parâmetros da URL.
-import './styleCadastro2.css'; // Importa os estilos.
-import api from '../../services/api'; // Importa a configuração da API.
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import './styleCadastro2.css'; 
+import api from '../../services/api';
+import NavPadrao from '../NavPadrao/NavPadrao';
 
 // --- COMPONENTE Cadastro2 ---
-// Define a segunda e última etapa do cadastro (pergunta e resposta secretas).
+// Segunda etapa do cadastro (pergunta e resposta de segurança).
 function Cadastro2() {
-    // --- HOOKS ---
+    // --- HOOKS e ESTADOS ---
     const navegar = useNavigate();
-    // O hook 'useParams' extrai o 'userId' da URL (ex: de "/Cadastro2/123", ele pega "123").
-    const { userId } = useParams();
+    const { userId } = useParams(); // Pega o ID do usuário da URL.
+    const [pergunta, setPergunta] = useState('');
+    const [resposta, setResposta] = useState('');
+    const [mensagem, setMensagem] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasError, setHasError] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
 
-    // --- ESTADOS DO COMPONENTE ---
-    const [pergunta, setPergunta] = useState(''); // Armazena o valor do input da pergunta.
-    const [resposta, setResposta] = useState(''); // Armazena o valor do input da resposta.
-    const [mensagem, setMensagem] = useState(''); // Armazena mensagens de feedback.
-    const [isLoading, setIsLoading] = useState(false); // Controla o estado de "carregando".
-
-    // --- EFEITOS (useEffect) ---
-    // Executa assim que o componente é montado.
+    // --- EFEITO: Verifica se o ID do usuário existe ao carregar a página. ---
     useEffect(() => {
-        // Verifica se a página foi carregada sem um ID de usuário na URL.
         if (!userId) {
+            // Se não houver ID, redireciona de volta para a primeira etapa.
             console.error("ERRO: A página Cadastro2 foi aberta sem um ID de usuário.");
-            setMensagem("Erro: ID de usuário não encontrado. Voltando...");
-            // Se não houver ID, redireciona o usuário de volta para a primeira etapa.
-            setTimeout(() => navegar('/Cadastro'), 2000);
+            navegar('/Cadastro');
         }
-    }, [userId, navegar]); // Dependências: o efeito roda se 'userId' ou 'navegar' mudarem.
+    }, [userId, navegar]);
 
-    // --- FUNÇÕES DE EVENTO ---
-    // Controla as mudanças no input da pergunta, limitando o número de caracteres.
-    const handlePerguntaChange = (e) => {
-        setPergunta(e.target.value.substring(0, 175));
-    };
+    // --- FUNÇÕES ---
+    // Limpa as mensagens de feedback.
+    function limparFeedback() {
+        setMensagem('');
+        setHasError(false);
+        setIsSuccess(false);
+    }
 
-    // Controla as mudanças no input da resposta.
-    const handleRespostaChange = (e) => {
-        setResposta(e.target.value);
-    };
-
-    // --- FUNÇÕES DE API ---
     // Finaliza o cadastro enviando a pergunta e resposta para a API.
-    async function finalizarCadastro() {
-        // Validação simples para garantir que os campos não estão vazios.
+    async function finalizarCadastro(e) {
+        e.preventDefault(); 
+        limparFeedback();
+        // Validação simples.
         if (!pergunta || !resposta) {
             setMensagem('Por favor, preencha todos os campos.');
+            setHasError(true);
             return;
         }
-
         setIsLoading(true);
-        setMensagem('');
-
         try {
-            // --- REQUISIÇÃO À API ---
-            // Envia uma requisição 'PUT' para ATUALIZAR o usuário existente com o ID fornecido.
-            await api.put(`/usuarios/${userId}`, {
-                pergunta: pergunta,
-                resposta: resposta,
-            });
-
+            // Atualiza o usuário com a pergunta e resposta.
+            await api.put(`/usuarios/${userId}`, { pergunta, resposta });
+            setIsSuccess(true);
             setMensagem('Cadastro finalizado com sucesso!');
-            // Após 2 segundos, redireciona para a página de Login.
-            setTimeout(() => navegar('/Login'), 2000);
-
+            navegar('/Home'); // Redireciona para a home.
         } catch (error) {
+            setHasError(true);
             setMensagem(error.response?.data?.mensagem || 'Erro ao finalizar o cadastro.');
-            console.error("Erro ao tentar finalizar o cadastro:", error);
-            setIsLoading(false); // Reativa o botão em caso de erro.
+        } finally {
+            if (!isSuccess) setIsLoading(false);
         }
     }
 
-    // --- RENDERIZAÇÃO DO COMPONENTE ---
+    // --- RENDERIZAÇÃO ---
     return (
         <div className='containerCadastro2'>
-            {/* Formulário da segunda etapa do Cadastro */}
-            <form className='formCadastro2'>
-                <h1 id='h1Cadastro2'>Cadastro</h1>
+            {/* Navbar com botão 'Home' desabilitado. */}
+            <NavPadrao homeButtonDisabled={true} />
 
-                {/* Grupo de input para a pergunta, incluindo o contador de caracteres. */}
-                <div className="input-group">
-                    <input
-                        placeholder='Pergunta (ex: nome do seu pet?)'
-                        name='pergunta' type='text'
-                        value={pergunta}
-                        onChange={handlePerguntaChange}
-                    />
-                    {/* Contador de caracteres para feedback visual. */}
-                    <span className="char-counter">
-                        {pergunta.length} / 175
-                    </span>
+            <form className='formCadastro2' onSubmit={finalizarCadastro}>
+                <h1 id='h1Cadastro2'>Última Etapa</h1>
+                {/* Inputs para pergunta e resposta. */}
+                <div className='inputBox'>
+                    <input placeholder='Crie uma pergunta secreta' name='pergunta' type='text' required value={pergunta} onChange={e => setPergunta(e.target.value)} onFocus={limparFeedback} className={hasError ? 'input-error' : ''} maxLength="175" />
+                    <i className='bx bx-help-circle'></i>
                 </div>
-
-                {/* Input para a resposta secreta. */}
-                <input
-                    placeholder='Resposta'
-                    name='resposta' type='text'
-                    value={resposta}
-                    onChange={handleRespostaChange}
-                />
-
-                {/* Botão para finalizar o cadastro. */}
-                <button id='butaoCadastro2' type='button' onClick={finalizarCadastro} disabled={isLoading}>
+                <div className='inputBox'>
+                    <input placeholder='Resposta da pergunta secreta' name='resposta' type='text' required value={resposta} onChange={e => setResposta(e.target.value)} onFocus={limparFeedback} className={hasError ? 'input-error' : ''} />
+                    <i className='bx bxs-key'></i>
+                </div>
+                {/* Exibição de mensagens de feedback. */}
+                {mensagem && <p id='mensagemCadastro2' className={isSuccess ? 'success' : 'error'}>{mensagem}</p>}
+                <div style={{ flexGrow: 1 }}></div> 
+                {/* Botão de finalização. */}
+                <button id='butaoCadastro2' type='submit' disabled={isLoading}>
                     {isLoading ? 'Finalizando...' : 'Finalizar Cadastro'}
                 </button>
-
-                {/* Exibição condicional da mensagem de feedback. */}
-                {mensagem && (
-                    <p id='mensagemCadastro2' className={mensagem.includes('sucesso') ? 'success' : 'error'}>
-                        {mensagem}
-                    </p>
-                )}
             </form>
         </div>
     );

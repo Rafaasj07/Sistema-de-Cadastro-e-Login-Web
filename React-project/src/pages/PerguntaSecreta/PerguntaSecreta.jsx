@@ -1,105 +1,89 @@
 // --- IMPORTAÇÕES ---
-import { useEffect, useState } from 'react'; // Hooks para efeitos colaterais e gerenciamento de estado.
-import { useNavigate, useParams } from 'react-router-dom'; // Hooks para navegação e captura de parâmetros da URL.
-import api from '../../services/api'; // Importa a configuração da API.
-import './stylePerguntaSecreta.css'; // Importa os estilos.
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import api from '../../services/api';
+import './stylePerguntaSecreta.css';
+import NavPadrao from '../NavPadrao/NavPadrao';
 
 // --- COMPONENTE PerguntaSecreta ---
+// Exibe a pergunta de segurança e valida a resposta do usuário.
 function PerguntaSecreta() {
-    // --- HOOKS ---
-    const navegar = useNavigate(); // Inicializa a função de navegação.
-    const { id } = useParams(); // Captura o 'id' do usuário da URL (ex: /PerguntaSecreta/123).
+    // --- HOOKS e ESTADOS ---
+    const navegar = useNavigate();
+    const { id } = useParams(); // Pega o ID do usuário da URL.
+    const [pergunta, setPergunta] = useState('');
+    const [tentativaResposta, setTentativaResposta] = useState('');
+    const [mensagem, setMensagem] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [hasError, setHasError] = useState(false);
 
-    // --- ESTADOS DO COMPONENTE ---
-    const [pergunta, setPergunta] = useState(''); // Armazena a pergunta secreta a ser exibida.
-    const [tentativaResposta, setTentativaResposta] = useState(''); // Armazena a resposta digitada.
-    const [mensagem, setMensagem] = useState(''); // Armazena mensagens de feedback.
-    const [isLoading, setIsLoading] = useState(false); // Controla o estado de "carregando".
-    const [isSuccess, setIsSuccess] = useState(false); // Controla o estilo da mensagem (sucesso/erro).
-
-    // --- EFEITOS (useEffect) ---
-    // Executa assim que o componente é montado.
+    // --- EFEITO: Busca a pergunta secreta do localStorage ao carregar. ---
     useEffect(() => {
-        // Busca a pergunta secreta que foi salva no localStorage na etapa anterior.
         const perguntaSalva = localStorage.getItem('pergunta');
         if (perguntaSalva) {
-            setPergunta(perguntaSalva); // Se encontrou, define no estado para exibição.
+            setPergunta(perguntaSalva);
         } else {
-            // Se não encontrou, exibe um erro e redireciona de volta.
-            setMensagem("Erro: Pergunta não encontrada. A redirecionar...");
-            setTimeout(() => navegar('/RecuperarSenha'), 2000);
+            // Se não encontrar, redireciona para a primeira etapa.
+            navegar('/RecuperarSenha');
         }
-    }, [navegar]); // O efeito depende da função 'navegar'.
+    }, [navegar]);
 
     // --- FUNÇÕES ---
-    // Envia a requisição para verificar se a resposta secreta está correta.
-    async function verificarResposta(e) {
-        e.preventDefault();
-        if (!tentativaResposta) {
-            setMensagem("Por favor, preencha a sua resposta.");
-            setIsSuccess(false);
-            return;
-        }
-
-        setIsLoading(true); // Ativa o "carregando".
+    // Limpa as mensagens de feedback.
+    function limparFeedback() {
         setMensagem('');
         setIsSuccess(false);
+        setHasError(false);
+    }
 
+    // Verifica se a resposta está correta.
+    async function verificarResposta(e) {
+        e.preventDefault();
+        limparFeedback();
+        if (!tentativaResposta) { /* Validação simples. */
+            setMensagem("Por favor, preencha a sua resposta.");
+            setHasError(true);
+            return;
+        }
+        setIsLoading(true);
         try {
-            // --- REQUISIÇÃO À API ---
-            // Envia o ID do usuário e a resposta para o backend.
-            const respostaApi = await api.post('/verificar-resposta', {
-                id: id,
-                tentativaResposta: tentativaResposta
-            });
-
+            // Envia a resposta para a API para verificação.
+            const respostaApi = await api.post('/verificar-resposta', { id, tentativaResposta });
             if (respostaApi.data.sucesso) {
-                // Se a resposta estiver correta...
+                // Se correta, navega para a página de alteração de senha.
                 setIsSuccess(true);
                 setMensagem('Resposta correta! Redirecionando...');
-
-                // Aguarda 2 segundos e navega para a página de mudança de senha.
-                setTimeout(() => {
-                    navegar(`/MudarSenha/${id}`);
-                }, 2000);
+                navegar(`/MudarSenha/${id}`);
             }
         } catch (error) {
-            // Se a resposta estiver errada ou houver outro erro...
+            setHasError(true);
             setMensagem(error.response?.data?.mensagem || 'Ocorreu um erro.');
-            setIsLoading(false); // Para o "carregando".
+            setIsLoading(false);
         }
     }
 
-    // --- RENDERIZAÇÃO DO COMPONENTE ---
+    // --- RENDERIZAÇÃO ---
     return (
         <div className='containerPerguntaSecreta'>
-            {/* Formulário da Pergunta Secreta */}
+            <NavPadrao />
             <form className='formPerguntaSecreta' onSubmit={verificarResposta}>
                 <h1 id='h1PerguntaSecreta'>Pergunta Secreta</h1>
-                {/* Exibe a pergunta carregada do localStorage. */}
-                <p className='pergunta-exibida'>{pergunta || "A carregar pergunta..."}</p>
-
-                {/* Input para a resposta */}
-                <input
-                    placeholder='A sua Resposta' name='resposta'
-                    type='text'
-                    value={tentativaResposta}
-                    onChange={(e) => setTentativaResposta(e.target.value)}
-                    onFocus={() => { setMensagem(''); setIsSuccess(false); }} // Limpa mensagem ao focar.
-                    required
-                />
-
-                {/* Botão de Confirmação */}
+                {/* Exibe a pergunta e o campo para a resposta. */}
+                <p className='pergunta-exibida'>{pergunta || "Carregando..."}</p>
+                <div className='inputBox'>
+                    <input placeholder='Sua Resposta Secreta' name='resposta' type='text' required value={tentativaResposta} onChange={(e) => setTentativaResposta(e.target.value)} onFocus={limparFeedback} className={hasError ? 'input-error' : ''} />
+                    <i className='bx bxs-key'></i>
+                </div>
+                {/* Exibe mensagens de feedback. */}
+                <div className="mensagem-feedback-container">
+                    {mensagem && <p className={isSuccess ? "mensagem-sucesso" : "mensagem-erro"}>{mensagem}</p>}
+                </div>
+                <div className="form-spacer"></div>
+                {/* Botão de confirmação. */}
                 <button id='butaoConfirma' type='submit' disabled={isLoading}>
-                    {isLoading ? 'A verificar...' : 'Confirmar Resposta'}
+                    {isLoading ? 'Verificando...' : 'Confirmar Resposta'}
                 </button>
-
-                {/* Exibe a mensagem de feedback com a classe de estilo correta. */}
-                {mensagem && (
-                    <p className={isSuccess ? "mensagem-sucesso" : "mensagem-erro"}>
-                        {mensagem}
-                    </p>
-                )}
             </form>
         </div>
     );

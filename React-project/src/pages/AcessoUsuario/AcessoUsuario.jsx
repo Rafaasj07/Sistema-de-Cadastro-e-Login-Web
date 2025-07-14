@@ -1,33 +1,42 @@
 // --- IMPORTAÇÕES ---
-import { useNavigate } from 'react-router-dom'; // Hook para navegar entre as páginas.
-import './styleAcessoUsuario.css'; // Importa os estilos da página.
-import logoIcone from '../../assets/icone.png';
+// Importa dependências do React Router e os estilos da página.
+import { useNavigate } from 'react-router-dom';
+import './styleAcessoUsuario.css';
+import NavPadrao from '../NavPadrao/NavPadrao';
 
 // --- COMPONENTE AcessoUsuario ---
-// Componente que mostra uma tela de sucesso após o login bem-sucedido do usuário.
+// Página de confirmação exibida após um login de usuário bem-sucedido.
 function AcessoUsuario() {
-  // --- HOOKS ---
-  const navegar = useNavigate(); // Inicializa a função de navegação.
+    // --- HOOKS ---
+    const navegar = useNavigate();
 
-  // --- RENDERIZAÇÃO DO COMPONENTE ---
-  return (
-    // Container principal da página.
-    <div className='containerAcesso'>
-      {/* Formulário usado como um container para agrupar o conteúdo. */}
-      <form className='formAcesso'>
-        {/* Título da página. */}
-        <h1 className='acessoH1'>Acesso Liberado ao Sistema de Cadastro e Login!</h1>
-        {/* Agrupa os botões de navegação. */}
-        <div className='botoesAcesso'>
-          {/* Botão para navegar de volta para a Home. */}
-          <button type='button' onClick={() => navegar('/Home')}>Home</button>
+    // --- RENDERIZAÇÃO DO COMPONENTE ---
+    return (
+        <div className='containerAcesso'>
+            {/* Barra de navegação padrão. */}
+            <NavPadrao />
+
+            {/* Conteúdo principal da página. */}
+            <main className="conteudoAcesso">
+                <div className="icone-sucesso">✓</div>
+                <h1 className='acessoH1'>Acesso Liberado!</h1>
+                <p className="acesso-subtitulo">Parabéns por fazer login em nosso sistema.</p>
+                {/* Botão para voltar à página inicial. */}
+                <button type='button' className="botao-home" onClick={() => navegar('/home')}>
+                    Voltar para a Home
+                </button>
+            </main>
+
+            {/* Rodapé com informações do desenvolvedor. */}
+            <footer className="footer-acesso">
+                <p className="footer-desenvolvido">Desenvolvido por Rafael Augusto</p>
+                <div className="footer-links">
+                    <a href="https://github.com/rafaasj07" target="_blank" rel="noopener noreferrer" className="footer-link">GitHub</a>
+                    <a href="https://instagram.com/rafael_asj7" target="_blank" rel="noopener noreferrer" className="footer-link">Instagram</a>
+                </div>
+            </footer>
         </div>
-        {/* Logo do sistema */}
-        <img src={logoIcone} alt="Logo do sistema" className="logoAcesso" />
-      </form>
-    </div>
-  );
+    );
 }
 
-// Exporta o componente para ser usado em outras partes da aplicação.
 export default AcessoUsuario;

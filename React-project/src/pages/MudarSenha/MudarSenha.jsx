@@ -1,90 +1,79 @@
 // --- IMPORTAÇÕES ---
-import { useState } from 'react'; // Hook para gerenciar o estado (senhas, mensagens).
-import { useNavigate, useParams } from 'react-router-dom'; // Hooks para navegação e captura de parâmetros da URL.
-import './styleMudarSenha.css'; // Importa os estilos.
-import api from '../../services/api'; // Importa a configuração da API.
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import './styleMudarSenha.css';
+import api from '../../services/api';
+import NavPadrao from '../NavPadrao/NavPadrao';
 
 // --- COMPONENTE MudarSenha ---
+// Permite ao usuário definir uma nova senha.
 function MudarSenha() {
-    // --- HOOKS ---
-    const navegar = useNavigate(); // Inicializa a função de navegação.
-    const { id } = useParams(); // Captura o 'id' do usuário da URL.
-
-    // --- ESTADOS DO COMPONENTE ---
-    const [senha1, setSenha1] = useState(''); // Armazena a nova senha.
-    const [senha2, setSenha2] = useState(''); // Armazena a confirmação da nova senha.
-    const [mensagem, setMensagem] = useState(''); // Armazena mensagens de feedback.
-    const [isLoading, setIsLoading] = useState(false); // Controla o estado de "carregando".
+    // --- HOOKS e ESTADOS ---
+    const navegar = useNavigate();
+    const { id } = useParams(); // Pega o ID do usuário da URL.
+    const [senha1, setSenha1] = useState('');
+    const [senha2, setSenha2] = useState(''); // Estado para confirmação da senha.
+    const [mensagem, setMensagem] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasError, setHasError] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
 
     // --- FUNÇÕES ---
-    // Limpa a mensagem de feedback ao focar em um input.
+    // Limpa as mensagens de feedback.
     function limparFeedback() {
         setMensagem('');
+        setHasError(false);
+        setIsSuccess(false);
     }
 
-    // Envia a requisição para alterar a senha.
+    // Lida com o envio do formulário para alterar a senha.
     async function submitAlterarSenha(e) {
-        e.preventDefault(); // Impede o recarregamento da página.
-
-        // Validação: verifica se as senhas coincidem.
+        e.preventDefault();
+        limparFeedback();
+        // Valida se as senhas coincidem.
         if (senha1 !== senha2) {
             setMensagem('As senhas não coincidem.');
+            setHasError(true);
             return;
         }
-
-        // Validação: verifica se a senha não está vazia.
-        if (!senha1) {
-            setMensagem('Por favor, insira uma nova senha.');
-            return;
-        }
-
         setIsLoading(true);
-        setMensagem('');
-
         try {
-            // --- REQUISIÇÃO À API ---
-            // Envia uma requisição para a rota '/mudarSenha' com o ID e a nova senha.
-            const respostaApi = await api.post('/mudarSenha', {
-                id: id,
-                NovaSenha: senha1
-            });
-
+            // Envia a nova senha para a API.
+            await api.post('/mudarSenha', { id, NovaSenha: senha1 });
+            setIsSuccess(true);
             setMensagem('Senha alterada com sucesso! Redirecionando...');
-            const perfil = respostaApi.data.perfil;
-            // Define para qual menu redirecionar com base no perfil do usuário.
-            const redirectPath = perfil === 'adm' ? '/MenuAdm' : '/MenuUsuario';
-            // Aguarda 2 segundos e redireciona.
-            setTimeout(() => navegar(redirectPath), 2000);
-
+            navegar('/home'); // Redireciona para a home.
         } catch (error) {
-            // Se houver um erro na API...
-            setMensagem(error.response?.data?.mensagem || 'Ocorreu um erro ao alterar a senha.');
-        } finally {
-            // Este bloco é executado sempre, seja com sucesso ou erro.
-            setIsLoading(false); // Para o estado de "carregando".
+            setHasError(true);
+            setMensagem(error.response?.data?.mensagem || 'Ocorreu um erro.');
+            setIsLoading(false);
         }
     }
 
-    // --- RENDERIZAÇÃO DO COMPONENTE ---
+    // --- RENDERIZAÇÃO ---
     return (
         <div className='containerMudarSenha'>
-            {/* Formulário para Mudar Senha */}
+            <NavPadrao />
             <form className='formMudarSenha' onSubmit={submitAlterarSenha}>
                 <h1 id='h1MudarSenha'>Mudar Senha</h1>
-                {/* Input para a nova senha */}
-                <input placeholder='Nova Senha' type='password' required value={senha1}
-                    onChange={e => setSenha1(e.target.value)}
-                    onFocus={limparFeedback} />
-                {/* Input para confirmar a nova senha */}
-                <input placeholder='Confirmar Senha' type='password' required value={senha2}
-                    onChange={e => setSenha2(e.target.value)}
-                    onFocus={limparFeedback} />
-                {/* Botão de Confirmação */}
+                {/* Inputs para nova senha e confirmação. */}
+                <div className='inputBox'>
+                    <input placeholder='Nova Senha' type='password' required value={senha1} onChange={e => setSenha1(e.target.value)} onFocus={limparFeedback} className={hasError ? 'input-error' : ''} />
+                    <i className='bx bxs-lock-alt'></i>
+                </div>
+                <div className='inputBox'>
+                    <input placeholder='Confirmar Senha' type='password' required value={senha2} onChange={e => setSenha2(e.target.value)} onFocus={limparFeedback} className={hasError ? 'input-error' : ''} />
+                    <i className='bx bxs-lock-alt'></i>
+                </div>
+                {/* Exibição de mensagens de feedback. */}
+                <div className="mensagem-feedback-container">
+                    {mensagem && <p className={isSuccess ? 'mensagem-sucesso' : 'mensagem-erro'}>{mensagem}</p>}
+                </div>
+                <div className="form-spacer"></div>
+                {/* Botão de confirmação. */}
                 <button id='butaoMudarSenha' type="submit" disabled={isLoading}>
                     {isLoading ? 'Alterando...' : 'Confirmar'}
                 </button>
-                {/* Exibe a mensagem de feedback. */}
-                {mensagem && <p className='feedback-message'>{mensagem}</p>}
             </form>
         </div>
     );

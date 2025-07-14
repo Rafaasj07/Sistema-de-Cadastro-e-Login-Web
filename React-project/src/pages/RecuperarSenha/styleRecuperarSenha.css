@@ -1,118 +1,118 @@
 /* --- CONTAINER GERAL --- */
 .containerRecpSenha {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 145px;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 115px 20px 20px;
+  box-sizing: border-box;
 }
 
 /* --- TÍTULO --- */
 #h1RecpSenha {
-    color: white;
-    font-size: 32px;
-    text-align: center;
-    margin-bottom: 10px;
+  color: #ffffff;
+  font-size: 32px;
+  text-align: center;
 }
 
 /* --- FORMULÁRIO --- */
 .formRecpSenha {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    padding: 30px;
-    border-radius: 15px;
-    background-color: #1c2738;
-    width: 100%;
-    height: 380px;
-    max-width: 400px;
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding: 30px 40px;
+  border-radius: 15px;
+  background-color: transparent;
+  border: 2px solid rgba(225, 225, 225, 0.2);
+  width: 100%;
+  max-width: 400px;
+  height: 450px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(30px);
 }
 
-/* --- INPUTS --- */
-.formRecpSenha input {
-    margin-top: 10px;
-    background-color: #2b3a50;
-    color: #ffffff;
-    border: 1.7px solid rgba(255, 255, 255, 0.08);
-    border-radius: 30px;
-    height: 45px;
-    font-size: 16px;
-    padding: 0 20px;
-    outline: none;
-    transition: border-color 0.3s, box-shadow 0.3s;
+/* --- INPUTS COM ÍCONES --- */
+.inputBox {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin-top: 15px;
 }
-
-.formRecpSenha input:focus {
-    border-color: #86b7fe;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+.inputBox input {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  outline: none;
+  border-radius: 40px;
+  border: 2px solid rgba(225, 225, 225, 0.2);
+  color: #fff;
+  padding: 20px 45px 20px 20px;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
-
-/* Estilo para corrigir a cor de fundo do preenchimento automático do navegador. */
-.formRecpSenha input:-webkit-autofill,
-.formRecpSenha input:-webkit-autofill:hover, 
-.formRecpSenha input:-webkit-autofill:focus, 
-.formRecpSenha input:-webkit-autofill:active {
-    -webkit-text-fill-color: #ffffff;
-    box-shadow: 0 0 0 30px #2b3a50 inset !important;
-    transition: background-color 5000s ease-in-out 0s;
+.inputBox i {
+  color: #fff;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
 }
+.inputBox input:focus {
+  border-color: #86b7fe; 
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); 
+}
+.inputBox .input-error { border-color: #e74c3c; }
 
-/* --- MENSAGENS DE FEEDBACK --- */
+/* --- MENSAGENS E BOTÕES --- */
 .mensagem-instrucao {
-    color: #cccccc;
-    font-size: 15px;
-    text-align: center;
-    font-style: italic;
-    word-break: break-word;
-    margin: -10px 0;
+  color: #cccccc;
+  font-size: 15px;
+  text-align: center;
+  margin-top: -15px;
 }
-
-.mensagem-erro, .mensagem-sucesso {
-    font-weight: bold;
-    text-align: center;
-    font-size: 16px;
-    min-height: 20px;
-    margin: -10px 0;
+.mensagem-erroRS,
+.mensagem-sucessoRS {
+  font-weight: 600;
+  padding-top: 35px;
+  text-align: center;
+  font-size: 16px; 
+  min-height: 20px;
+  margin: 0;
 }
-
-.mensagem-erro {
-    color: tomato; /* Cor para erros. */
-}
-
-.mensagem-sucesso {
-    color: limegreen; /* Cor para sucessos. */
-}
-
-/* --- BOTÕES --- */
-#butaoRecpSenha, .butaoVoltarHomeRecSenha {
-    border-radius: 30px;
-    height: 45px;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 16px;
-    color: white;
-    transition: opacity 0.3s, background-color 0.3s;
-}
-
+.mensagem-erroRS { color: #ff7b7b; }
+.mensagem-sucessoRS { color: #28a745; }
 #butaoRecpSenha {
-    background-color: rgb(67 52 157);
-    margin-top: 20px;
+  width: 100%;
+  height: 50px;
+  background-color: #fff;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+  margin-top: 15px;
+  transition: all 0.3s ease;
 }
-
-.butaoVoltarHomeRecSenha {
-    background-color: #b86c45;
-    width: 100%;
-    max-width: 400px;
-    margin-top: 20px;
+#butaoRecpSenha:hover {
+  background-color: transparent;
+  border: 2px solid rgba(225, 225, 225, 0.2);
+  color: #fff;
 }
-
-#butaoRecpSenha:hover, .butaoVoltarHomeRecSenha:hover {
-    opacity: 0.8; /* Efeito ao passar o mouse. */
-}
-
-/* Estilo para o botão quando está desabilitado. */
 #butaoRecpSenha:disabled {
-    background-color: #3a4a61;
-    cursor: not-allowed;
+  background-color: #555;
+  color: #aaa;
+  cursor: not-allowed;
+  border: none;
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 768px) {
+  .containerRecpSenha { margin-top: 70px; }
+}
+@media (max-width: 545px) {
+  .containerRecpSenha { margin-top: 70px; }
 }
