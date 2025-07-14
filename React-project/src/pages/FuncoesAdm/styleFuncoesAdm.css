@@ -1,8 +1,9 @@
 /* --- CONTAINER PRINCIPAL DA PÁGINA --- */
 .pagina-funcoes-adm {
   width: 100%;
-  height: 100vh; 
-  overflow-y: scroll; /* Permite rolar a página. */
+  height: 100vh;
+  overflow-y: scroll;
+  /* Permite rolar a página. */
   padding: 20px;
   box-sizing: border-box;
   background-color: #12121a;
@@ -25,11 +26,13 @@
 .formulario-busca {
   display: flex;
   align-items: center;
-  gap: 15px; 
+  gap: 15px;
 }
 
 /* --- ESTILOS DE INPUT, BOTÕES E CHECKBOX --- */
-.campo-busca, .botao-busca, .botoes-fun-adm button {
+.campo-busca,
+.botao-busca,
+.botoes-fun-adm button {
   height: 45px;
   font-size: 16px;
   border-radius: 25px;
@@ -37,63 +40,87 @@
   padding: 0 20px;
   transition: all 0.3s ease;
 }
+
 .campo-busca {
   width: 500px;
   background-color: #2f3b52;
   color: #ffffff;
 }
+
 .campo-busca:focus {
   border: 1px solid #5644c5;
   box-shadow: 0 0 0 3px rgba(86, 68, 197, 0.3);
 }
-.botao-busca, .botoes-fun-adm button {
+
+.botao-busca,
+.botoes-fun-adm button {
   background-color: #43349d;
   color: white;
   cursor: pointer;
   font-weight: 600;
 }
-.botao-busca:hover, .botoes-fun-adm button:hover {
+
+.botao-busca:hover,
+.botoes-fun-adm button:hover {
   background-color: #5644c5;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
+
 .selecao-todos-users {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
+
 .label-customizada {
-    color: white;
-    font-size: 17px;
-    cursor: pointer;
-    user-select: none;
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+  user-select: none;
 }
-#checkbox-customizado { display: none; } /* Esconde o checkbox real. */
-.label-customizada::before { /* Cria o checkbox customizado. */
-    content: '';
-    width: 20px;
-    height: 20px;
-    border: 2px solid #5644c5;
-    border-radius: 5px;
-    background-color: #2f3b52;
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 8px;
-    transition: all 0.2s ease;
+
+#checkbox-customizado {
+  display: none;
 }
-#checkbox-customizado:checked + .label-customizada::before { /* Estilo quando marcado. */
-    background-color: #5644c5;
-    border-color: #a39cf1;
-    content: '✓';
-    color: white;
-    text-align: center;
-    line-height: 18px;
-    font-weight: bold;
+
+/* Esconde o checkbox real. */
+.label-customizada::before {
+  /* Cria o checkbox customizado. */
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid #5644c5;
+  border-radius: 5px;
+  background-color: #2f3b52;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+  transition: all 0.2s ease;
+}
+
+#checkbox-customizado:checked+.label-customizada::before {
+  /* Estilo quando marcado. */
+  background-color: #5644c5;
+  border-color: #a39cf1;
+  content: '✓';
+  color: white;
+  text-align: center;
+  line-height: 18px;
+  font-weight: bold;
 }
 
 /* --- LOGO E BOTÃO HOME --- */
-.logo-adm { width: 50px; height: auto; margin-left: 20px; }
-.botoes-fun-adm { margin-left: auto; margin-right: 20px; }
+.logo-adm {
+  width: 50px;
+  height: auto;
+  margin-left: 20px;
+}
+
+.botoes-fun-adm {
+  margin-left: auto;
+  margin-right: 20px;
+}
 
 /* --- CARDS DE USUÁRIO --- */
 .card-geral {
@@ -103,6 +130,7 @@
   gap: 16px;
   width: 100%;
 }
+
 .card {
   display: flex;
   justify-content: space-between;
@@ -116,12 +144,22 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 .card:hover {
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
-.card p { color: #c5c5c5; font-size: 16px; margin: 5px 0; }
-.card span { font-weight: 600; color: #ffffff; }
+
+.card p {
+  color: #c5c5c5;
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+.card span {
+  font-weight: 600;
+  color: #ffffff;
+}
 
 /* --- BOTÃO DE EXCLUIR --- */
 .card button {
@@ -132,5 +170,12 @@
   border-radius: 50%;
   transition: background-color 0.2s ease;
 }
-.card button:hover { background-color: rgba(255, 82, 82, 0.2); }
-.card button img { width: 24px; height: 24px; }
+
+.card button:hover {
+  background-color: rgba(255, 82, 82, 0.2);
+}
+
+.card button img {
+  width: 24px;
+  height: 24px;
+}

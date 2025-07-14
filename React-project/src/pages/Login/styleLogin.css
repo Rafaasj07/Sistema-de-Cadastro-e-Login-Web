@@ -41,7 +41,8 @@
     position: relative;
     width: 100%;
     height: 50px;
-    margin: 10px 0; /* Espaçamento entre os inputs */
+    margin: 10px 0;
+    /* Espaçamento entre os inputs */
 }
 
 .inputBox input {
@@ -62,9 +63,12 @@
 .inputBox input:-webkit-autofill:hover,
 .inputBox input:-webkit-autofill:focus,
 .inputBox input:-webkit-autofill:active {
-    -webkit-text-fill-color: #fff !important; /* Força a cor do texto para branco */
-    transition: background-color 5000s ease-in-out 0s; /* Evita que o navegador mude a cor de fundo */
-    -webkit-box-shadow: 0 0 0 1000px transparent inset !important; /* Cobre o fundo padrão com uma sombra transparente */
+    -webkit-text-fill-color: #fff !important;
+    /* Força a cor do texto para branco */
+    transition: background-color 5000s ease-in-out 0s;
+    /* Evita que o navegador mude a cor de fundo */
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+    /* Cobre o fundo padrão com uma sombra transparente */
 }
 
 .inputBox .input-error {
@@ -94,7 +98,8 @@
     display: flex;
     justify-content: space-between;
     font-size: 15px;
-    margin: -5px 8px 15px 8px; /* Ajusta a posição */
+    margin: -5px 8px 15px 8px;
+    /* Ajusta a posição */
 }
 
 .lembrarSenha label {
@@ -141,7 +146,8 @@
 .cadastroLink {
     font-size: 15px;
     text-align: center;
-    margin-top: 15px; /* Margem superior menor para subir o link */
+    margin-top: 15px;
+    /* Margem superior menor para subir o link */
 }
 
 .cadastroLink p {
@@ -162,7 +168,8 @@
 
 /* --- ALTERAÇÃO: Espaçador e Mensagem de Erro --- */
 .form-spacer {
-    flex-grow: 1; /* Faz este elemento ocupar todo o espaço vertical disponível */
+    flex-grow: 1;
+    /* Faz este elemento ocupar todo o espaço vertical disponível */
 }
 
 .mensagem-erro {
@@ -171,6 +178,7 @@
     font-weight: 500;
     text-align: center;
     /* A mensagem agora não precisa de margem superior, pois o spacer a empurra para baixo */
-    margin-bottom: 5px; /* Pequena margem para não colar na borda */
-    min-height: 15px; 
+    margin-bottom: 5px;
+    /* Pequena margem para não colar na borda */
+    min-height: 15px;
 }

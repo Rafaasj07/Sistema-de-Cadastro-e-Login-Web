@@ -1,7 +1,7 @@
 // --- IMPORTAÇÕES ---
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import './styleCadastro2.css'; 
+import './styleCadastro2.css';
 import api from '../../services/api';
 import NavPadrao from '../NavPadrao/NavPadrao';
 
@@ -37,7 +37,7 @@ function Cadastro2() {
 
     // Finaliza o cadastro enviando a pergunta e resposta para a API.
     async function finalizarCadastro(e) {
-        e.preventDefault(); 
+        e.preventDefault();
         limparFeedback();
         // Validação simples.
         if (!pergunta || !resposta) {
@@ -79,7 +79,7 @@ function Cadastro2() {
                 </div>
                 {/* Exibição de mensagens de feedback. */}
                 {mensagem && <p id='mensagemCadastro2' className={isSuccess ? 'success' : 'error'}>{mensagem}</p>}
-                <div style={{ flexGrow: 1 }}></div> 
+                <div style={{ flexGrow: 1 }}></div>
                 {/* Botão de finalização. */}
                 <button id='butaoCadastro2' type='submit' disabled={isLoading}>
                     {isLoading ? 'Finalizando...' : 'Finalizar Cadastro'}

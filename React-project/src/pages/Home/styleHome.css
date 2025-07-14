@@ -1,10 +1,14 @@
 /* --- ESTILOS GERAIS --- */
-body { margin: 0; font-family: 'Poppins', sans-serif; background-color: #12121a; }
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #12121a;
+}
 
 /* --- CONTAINER PRINCIPAL --- */
 .containerHome {
   width: 100%;
-  min-height: 100vh; 
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,27 +27,41 @@ body { margin: 0; font-family: 'Poppins', sans-serif; background-color: #12121a;
   align-items: center;
   justify-content: space-between;
   padding: 0 50px 0 20px;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 /* --- SEÇÕES DA NAV --- */
-.logoTituloHome, .direita-nav, .botoesHome {
+.logoTituloHome,
+.direita-nav,
+.botoesHome {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.direita-nav { gap: 25px; }
-.botoesHome { gap: 20px; }
+
+.direita-nav {
+  gap: 25px;
+}
+
+.botoesHome {
+  gap: 20px;
+}
 
 /* --- ELEMENTOS DA NAV --- */
-.logoHome { height: 55px; width: auto; margin-top: 6px; }
+.logoHome {
+  height: 55px;
+  width: auto;
+  margin-top: 6px;
+}
+
 #h1Home {
   color: #ffffff;
   font-size: 32px;
   font-weight: 600;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   margin: 0;
 }
+
 .containerH2 h2 {
   color: #e0e0e0;
   font-size: 22px;
@@ -65,8 +83,10 @@ body { margin: 0; font-family: 'Poppins', sans-serif; background-color: #12121a;
   background-color: #43349d;
   transition: all 0.3s ease;
 }
+
 .botoesHome button:hover,
-.botoesHome button.active { /* Estilo do botão ativo/hover. */
+.botoesHome button.active {
+  /* Estilo do botão ativo/hover. */
   transform: translateY(-3px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   background-color: #5644c5;

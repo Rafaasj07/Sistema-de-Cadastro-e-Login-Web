@@ -3,7 +3,7 @@
   width: 100%;
   min-height: 100vh;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 115px 20px 20px;
@@ -39,6 +39,7 @@
   width: 100%;
   height: 50px;
 }
+
 .inputBox input {
   width: 100%;
   height: 100%;
@@ -51,6 +52,7 @@
   font-size: 16px;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
+
 .inputBox i {
   color: #fff;
   position: absolute;
@@ -59,28 +61,43 @@
   transform: translateY(-50%);
   font-size: 20px;
 }
+
 .inputBox input:focus {
-  border-color: #86b7fe; 
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); 
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
-.inputBox .input-error { border-color: #e74c3c; }
+
+.inputBox .input-error {
+  border-color: #e74c3c;
+}
 
 /* --- MENSAGENS DE FEEDBACK --- */
 .mensagem-feedback-container {
-  min-height: 20px; 
+  min-height: 20px;
   text-align: center;
   margin-top: -10px;
 }
-.mensagem-erro, .mensagem-sucesso {
+
+.mensagem-erro,
+.mensagem-sucesso {
   font-weight: 600;
   font-size: 15px;
   margin: 0;
 }
-.mensagem-erro { color: #ff7b7b; }
-.mensagem-sucesso { color: #28a745; }
+
+.mensagem-erro {
+  color: #ff7b7b;
+}
+
+.mensagem-sucesso {
+  color: #28a745;
+}
 
 /* --- ESPAÇADOR E BOTÃO --- */
-.form-spacer { flex-grow: 1; }
+.form-spacer {
+  flex-grow: 1;
+}
+
 #butaoMudarSenha {
   width: 100%;
   height: 50px;
@@ -94,11 +111,13 @@
   transition: all 0.3s ease;
   flex-shrink: 0;
 }
+
 #butaoMudarSenha:hover {
   background-color: transparent;
   border: 2px solid rgba(225, 225, 225, 0.2);
   color: #fff;
 }
+
 #butaoMudarSenha:disabled {
   background-color: #555;
   color: #aaa;

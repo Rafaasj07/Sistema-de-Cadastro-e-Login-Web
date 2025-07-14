@@ -1,11 +1,13 @@
 /* --- BARRA DE NAVEGAÇÃO --- */
 .containerPadrao {
   width: 100%;
-  position: fixed; /* Fixa a navbar no topo. */
+  position: fixed;
+  /* Fixa a navbar no topo. */
   top: 0;
   left: 0;
   z-index: 1000;
 }
+
 .navPadrao {
   width: 100%;
   height: 90px;
@@ -27,17 +29,27 @@
   align-items: center;
   gap: 10px;
 }
-.logoPadrao { height: 55px; width: auto; margin-top: 6px; }
+
+.logoPadrao {
+  height: 55px;
+  width: auto;
+  margin-top: 6px;
+}
+
 #h1Padrao {
   color: #ffffff;
   font-size: 32px;
   font-weight: 600;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   margin: 0;
 }
 
 /* --- BOTÃO DE NAVEGAÇÃO --- */
-.botaoNav { margin-left: auto; margin-right: 20px; }
+.botaoNav {
+  margin-left: auto;
+  margin-right: 20px;
+}
+
 .botaoNav button {
   height: 45px;
   padding: 0 25px;
@@ -48,14 +60,16 @@
   color: white;
   border: none;
   cursor: pointer;
-  white-space: nowrap; 
+  white-space: nowrap;
   transition: all 0.3s ease;
 }
+
 .botaoNav button:hover {
   background-color: #5644c5;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
+
 .botaoNav button:disabled {
   background-color: #555;
   opacity: 0.6;
@@ -63,4 +77,7 @@
   transform: none;
   box-shadow: none;
 }
-.botaoNav button:disabled:hover { background-color: #555; }
+
+.botaoNav button:disabled:hover {
+  background-color: #555;
+}

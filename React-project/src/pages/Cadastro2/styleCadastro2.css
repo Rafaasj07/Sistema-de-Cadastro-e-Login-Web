@@ -5,7 +5,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 170px 20px 20px; /* ← espaço para a navbar no topo */
+    padding: 170px 20px 20px;
+    /* ← espaço para a navbar no topo */
     box-sizing: border-box;
 }
 
@@ -25,7 +26,8 @@
     height: 450px;
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Reduzido para ficar igual ao formCadastro */
+    gap: 10px;
+    /* Reduzido para ficar igual ao formCadastro */
     padding: 30px 40px 50px 40px;
     border-radius: 15px;
     background-color: transparent;
@@ -86,9 +88,12 @@
 .inputBox input:-webkit-autofill:hover,
 .inputBox input:-webkit-autofill:focus,
 .inputBox input:-webkit-autofill:active {
-    -webkit-text-fill-color: #fff !important; /* Força a cor do texto para branco */
-    transition: background-color 5000s ease-in-out 0s; /* Evita que o navegador mude a cor de fundo */
-    -webkit-box-shadow: 0 0 0 1000px transparent inset !important; /* Cobre o fundo padrão com uma sombra transparente */
+    -webkit-text-fill-color: #fff !important;
+    /* Força a cor do texto para branco */
+    transition: background-color 5000s ease-in-out 0s;
+    /* Evita que o navegador mude a cor de fundo */
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+    /* Cobre o fundo padrão com uma sombra transparente */
 }
 
 /* --- MENSAGENS DE FEEDBACK --- */
@@ -101,11 +106,13 @@
 }
 
 #mensagemCadastro2.success {
-    color: #28a745; /* Verde sucesso */
+    color: #28a745;
+    /* Verde sucesso */
 }
 
 #mensagemCadastro2.error {
-    color: #ff7b7b; /* Vermelho erro */
+    color: #ff7b7b;
+    /* Vermelho erro */
 }
 
 /* --- BOTÃO --- */
@@ -121,7 +128,8 @@
     font-weight: 600;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
-    margin-top: 10px; /* Adicionado para consistência */
+    margin-top: 10px;
+    /* Adicionado para consistência */
 }
 
 #butaoCadastro2:hover {

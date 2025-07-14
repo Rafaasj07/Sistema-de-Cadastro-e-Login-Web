@@ -9,7 +9,7 @@ import './index.css';
 // Importa todos os componentes que representam as páginas da aplicação.
 import Home from './pages/Home/Home';
 import Cadastro from './pages/Cadastro/Cadastro';
-import Cadastro2  from './pages/Cadastro2/Cadastro2';
+import Cadastro2 from './pages/Cadastro2/Cadastro2';
 import Login from './pages/Login/Login';
 import FuncoesAdm from './pages/FuncoesAdm/FuncoesAdm';
 import RecuperarSenha from './pages/RecuperarSenha/RecuperarSenha';

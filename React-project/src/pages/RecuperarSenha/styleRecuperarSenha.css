@@ -40,6 +40,7 @@
   height: 50px;
   margin-top: 15px;
 }
+
 .inputBox input {
   width: 100%;
   height: 100%;
@@ -52,6 +53,7 @@
   font-size: 16px;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
+
 .inputBox i {
   color: #fff;
   position: absolute;
@@ -60,11 +62,15 @@
   transform: translateY(-50%);
   font-size: 20px;
 }
+
 .inputBox input:focus {
-  border-color: #86b7fe; 
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); 
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
-.inputBox .input-error { border-color: #e74c3c; }
+
+.inputBox .input-error {
+  border-color: #e74c3c;
+}
 
 /* --- MENSAGENS E BOTÕES --- */
 .mensagem-instrucao {
@@ -73,17 +79,25 @@
   text-align: center;
   margin-top: -15px;
 }
+
 .mensagem-erroRS,
 .mensagem-sucessoRS {
   font-weight: 600;
   padding-top: 35px;
   text-align: center;
-  font-size: 16px; 
+  font-size: 16px;
   min-height: 20px;
   margin: 0;
 }
-.mensagem-erroRS { color: #ff7b7b; }
-.mensagem-sucessoRS { color: #28a745; }
+
+.mensagem-erroRS {
+  color: #ff7b7b;
+}
+
+.mensagem-sucessoRS {
+  color: #28a745;
+}
+
 #butaoRecpSenha {
   width: 100%;
   height: 50px;
@@ -97,11 +111,13 @@
   margin-top: 15px;
   transition: all 0.3s ease;
 }
+
 #butaoRecpSenha:hover {
   background-color: transparent;
   border: 2px solid rgba(225, 225, 225, 0.2);
   color: #fff;
 }
+
 #butaoRecpSenha:disabled {
   background-color: #555;
   color: #aaa;
@@ -111,8 +127,13 @@
 
 /* --- RESPONSIVIDADE --- */
 @media (max-width: 768px) {
-  .containerRecpSenha { margin-top: 70px; }
+  .containerRecpSenha {
+    margin-top: 70px;
+  }
 }
+
 @media (max-width: 545px) {
-  .containerRecpSenha { margin-top: 70px; }
+  .containerRecpSenha {
+    margin-top: 70px;
+  }
 }
