@@ -8,7 +8,7 @@ const api = axios.create({
     // Define o endereço base para todas as requisições feitas por esta instância.
     //Localmente: baseURL: 'http://localhost:3000'
     //Deploy: baseURL: '/'
-    baseURL: 'http://localhost:3000'
+    baseURL: '/'
 });
 
 // --- EXPORTAÇÃO ---
